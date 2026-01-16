@@ -13,100 +13,122 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- 2. THE PARALLAX ENGINE (FIXED) ---
-# We inject a specific HTML container for the background and move IT, not the body.
+# --- 2. THE "HATOM" VISUAL ENGINE (CSS ANIMATION) ---
 st.markdown("""
 <style>
-    /* 1. HIDE DEFAULT STREAMLIT BACKGROUNDS */
+    /* IMPORT FONTS */
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;600&display=swap');
+
+    /* --- ROOT CONTAINER SETUP --- */
     .stApp {
-        background: transparent !important;
-    }
-    header, footer {visibility: hidden !important;}
-    
-    /* 2. THE PARALLAX WRAPPER */
-    #parallax-bg {
-        position: fixed;
-        top: -10%;
-        left: -10%;
-        width: 120%;
-        height: 120%;
-        z-index: -1;
-        background-image: url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5980?q=80&w=2672&auto=format&fit=crop');
-        background-size: cover;
+        background-color: #000000; /* Fallback */
+        /* THE HATOM WALLPAPER */
+        background-image: url('https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?q=80&w=2672&auto=format&fit=crop');
+        background-size: 120% 120%; /* Zoomed in for movement */
         background-position: center;
-        filter: brightness(0.7) contrast(1.2) hue-rotate(10deg);
-        transition: transform 0.1s ease-out;
-        pointer-events: none;
-    }
-    
-    /* 3. VIGNETTE OVERLAY (To make text readable) */
-    #overlay {
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: radial-gradient(circle at center, transparent 0%, #02040a 90%);
-        z-index: -1;
-        pointer-events: none;
+        background-repeat: no-repeat;
+        /* THE MOVING EFFECT (CSS ANIMATION) */
+        animation: drift 60s ease-in-out infinite alternate;
     }
 
-    /* 4. HATOM UI SYSTEM */
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;600&display=swap');
-    
+    /* KEYFRAMES FOR BACKGROUND MOVEMENT */
+    @keyframes drift {
+        0% { background-position: 0% 0%; }
+        100% { background-position: 100% 100%; }
+    }
+
+    /* OVERLAY FOR READABILITY (Vignette) */
+    .stApp::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: radial-gradient(circle at center, rgba(0,0,0,0.2) 0%, #000000 90%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    /* HIDE DEFAULT ELEMENTS */
+    header, footer {visibility: hidden !important;}
     .block-container {
+        position: relative;
+        z-index: 1; /* Above background */
         padding-top: 4rem;
+        padding-bottom: 5rem;
         max-width: 1400px;
     }
 
-    /* GLASS CARDS */
+    /* --- GLASS CARDS (High Transparency) --- */
     .hatom-card {
-        background: rgba(13, 17, 28, 0.5);
+        background: rgba(13, 17, 28, 0.5); /* 50% Opacity for Glass Effect */
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 24px;
         padding: 30px;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(20px); /* Heavy Blur */
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         margin-bottom: 24px;
         transition: transform 0.3s ease, border-color 0.3s ease;
     }
     .hatom-card:hover {
-        border-color: rgba(139, 92, 246, 0.5);
+        border-color: rgba(139, 92, 246, 0.5); /* Purple Glow */
         transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
     }
 
-    /* TYPOGRAPHY */
-    h1, h2, h3 { font-family: 'Outfit', sans-serif; color: #fff; }
+    /* --- TYPOGRAPHY --- */
+    h1, h2, h3 { font-family: 'Outfit', sans-serif; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
     
     .hero-title {
         font-family: 'Outfit', sans-serif;
         font-weight: 800;
-        font-size: 72px;
-        background: linear-gradient(180deg, #fff 0%, #94a3b8 100%);
+        font-size: 80px;
+        background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         letter-spacing: -3px;
         line-height: 1;
-        text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
     }
 
-    /* INPUTS */
+    .section-label {
+        font-family: 'Outfit', sans-serif;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #94a3b8;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .section-label::before {
+        content: "";
+        width: 6px; height: 6px;
+        background: #8b5cf6;
+        border-radius: 50%;
+        box-shadow: 0 0 8px #8b5cf6;
+    }
+
+    /* --- INPUT FIELDS (Glass) --- */
     .stTextInput input, .stNumberInput input, .stDateInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] {
-        background-color: rgba(0, 0, 0, 0.3) !important;
+        background-color: rgba(0, 0, 0, 0.4) !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         border-radius: 12px !important;
         color: #fff !important;
         padding: 15px !important;
         backdrop-filter: blur(5px);
+        font-family: 'Inter', sans-serif;
     }
     .stTextInput input:focus, .stNumberInput input:focus {
         border-color: #8b5cf6 !important;
-        background-color: rgba(139, 92, 246, 0.1) !important;
+        box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
     }
 
-    /* BUTTONS */
+    /* --- BUTTONS (Neon Gradient) --- */
     .stButton > button {
         width: 100%;
         height: 60px;
-        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
         border: none;
         border-radius: 16px;
         color: white;
@@ -115,13 +137,54 @@ st.markdown("""
         text-transform: uppercase;
         letter-spacing: 1px;
         transition: all 0.3s;
+        box-shadow: 0 10px 30px rgba(147, 51, 234, 0.3);
     }
     .stButton > button:hover {
         transform: scale(1.02);
-        box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+        box-shadow: 0 20px 50px rgba(147, 51, 234, 0.5);
     }
 
-    /* SUCCESS BOX */
+    /* --- TABS --- */
+    .stTabs [data-baseweb="tab-list"] {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 6px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.05);
+        gap: 8px;
+        backdrop-filter: blur(10px);
+    }
+    .stTabs [data-baseweb="tab"] {
+        color: #94a3b8;
+        font-family: 'Outfit', sans-serif;
+        font-weight: 600;
+        border-radius: 12px;
+        padding: 10px 20px;
+        border: none;
+    }
+    .stTabs [aria-selected="true"] {
+        background: rgba(255,255,255,0.1);
+        color: #fff !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* --- METRICS --- */
+    .metric-val {
+        font-family: 'Outfit', sans-serif;
+        font-size: 56px;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1;
+        text-shadow: 0 0 30px rgba(255,255,255,0.1);
+    }
+    .metric-lbl {
+        color: #94a3b8;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+    }
+
+    /* --- SUCCESS BOX --- */
     .hatom-success {
         background: rgba(16, 185, 129, 0.2);
         border: 1px solid rgba(16, 185, 129, 0.4);
@@ -132,36 +195,9 @@ st.markdown("""
         margin-bottom: 20px;
         backdrop-filter: blur(10px);
         font-weight: 600;
-    }
-    
-    /* METRICS */
-    .metric-val {
-        font-family: 'Outfit', sans-serif;
-        font-size: 48px;
-        font-weight: 700;
-        color: #fff;
-    }
-    .metric-lbl {
-        color: #94a3b8;
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
     }
 </style>
-
-<div id="parallax-bg"></div>
-<div id="overlay"></div>
-
-<script>
-    // TRACK MOUSE MOVEMENT AND MOVE THE #parallax-bg ELEMENT
-    document.addEventListener('mousemove', function(e) {
-        const bg = document.getElementById('parallax-bg');
-        const x = (window.innerWidth - e.pageX * 2) / 50; // Strength of movement
-        const y = (window.innerHeight - e.pageY * 2) / 50;
-        
-        bg.style.transform = `translateX(${x}px) translateY(${y}px) scale(1.1)`;
-    });
-</script>
 """, unsafe_allow_html=True)
 
 # --- 3. BACKEND ---
@@ -199,14 +235,14 @@ def load_data():
 
 df = load_data()
 
-# --- 4. HEADER ---
+# --- 4. HERO SECTION ---
 c1, c2 = st.columns([2, 1])
 with c1:
     st.markdown('<div class="hero-title">PROTOCOL OS</div>', unsafe_allow_html=True)
 with c2:
-    st.markdown('<div style="text-align:right; padding-top:30px; color:#94a3b8; letter-spacing:1px; font-family:Outfit">SYSTEM: <b style="color:#4ade80">ONLINE</b></div>', unsafe_allow_html=True)
+    st.markdown('<div style="text-align:right; padding-top:40px; color:#94a3b8; letter-spacing:1px; font-family:Outfit; font-size:14px;">SYSTEM STATUS: <b style="color:#4ade80; text-shadow:0 0 10px #4ade80;">● ONLINE</b></div>', unsafe_allow_html=True)
 
-st.markdown("<div style='height:30px'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height:40px'></div>", unsafe_allow_html=True)
 
 if 'success_msg' in st.session_state:
     st.markdown(f"<div class='hatom-success'>{st.session_state['success_msg']}</div>", unsafe_allow_html=True)
@@ -226,13 +262,13 @@ with tab_log:
             last_val = 94.0
             if not df.empty: last_val = float(df['weight'].iloc[-1])
             
-            st.markdown("### NEW ENTRY LOG")
+            st.markdown('<div class="section-label">NEW ENTRY LOG</div>', unsafe_allow_html=True)
             c1, c2 = st.columns(2)
             d_in = c1.date_input("Date", datetime.today())
             w_in = c2.number_input("Weight (kg)", value=last_val, step=0.1, format="%.1f")
             
             st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown("### PROTOCOLS")
+            st.markdown('<div class="section-label">PROTOCOL CHECKLIST</div>', unsafe_allow_html=True)
             
             h1, h2 = st.columns(2)
             with h1:
@@ -245,13 +281,13 @@ with tab_log:
                 junk = st.checkbox("No Junk Food")
             
             st.markdown("<br>", unsafe_allow_html=True)
-            notes = st.text_area("Notes", height=80, placeholder="Session details...")
+            notes = st.text_area("Session Notes", height=80, placeholder="Details on energy, mood, and performance...")
             
             st.markdown("<br>", unsafe_allow_html=True)
             if st.form_submit_button("INITIATE UPLOAD"):
                 try:
                     if not df.empty and (df['date'] == pd.Timestamp(d_in)).any():
-                        st.warning("Date exists.")
+                        st.warning("Data for this date already exists.")
                     else:
                         sheet = get_db_connection()
                         row = [d_in.strftime("%Y-%m-%d"), w_in, int(run), int(lift), int(cold), int(vac), int(diet), int(junk), 7, str(notes)]
@@ -275,10 +311,10 @@ with tab_dash:
         
         def card(lbl, val, sub):
             return f"""
-            <div class="hatom-card" style="text-align:center; padding:20px;">
+            <div class="hatom-card" style="text-align:center; padding:25px;">
                 <div class="metric-lbl">{lbl}</div>
                 <div class="metric-val">{val}</div>
-                <div style="font-size:12px; color:#64748b;">{sub}</div>
+                <div style="font-size:12px; color:#64748b; margin-top:5px;">{sub}</div>
             </div>
             """
             
@@ -299,11 +335,11 @@ with tab_dash:
         
         with g1:
             st.markdown('<div class="hatom-card">', unsafe_allow_html=True)
-            st.markdown("### TRAJECTORY")
+            st.markdown('<div class="section-label">TRAJECTORY</div>', unsafe_allow_html=True)
             fig = go.Figure()
             fig.add_trace(go.Scatter(x=df['date'], y=df['weight'], mode='lines', fill='tozeroy', 
                                    line=dict(color='#8b5cf6', width=3), 
-                                   fillcolor='rgba(139, 92, 246, 0.1)'))
+                                   fillcolor='rgba(139, 92, 246, 0.1)', name='Weight'))
             fig.add_trace(go.Scatter(x=[df['date'].min(), df['date'].max()], y=[85, 85], mode='lines', line=dict(dash='dash', color='#64748b')))
             fig.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', 
                             margin=dict(t=20,l=0,r=0,b=0), height=350, xaxis=dict(showgrid=False), yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.05)'), showlegend=False)
@@ -312,7 +348,7 @@ with tab_dash:
             
         with g2:
             st.markdown('<div class="hatom-card">', unsafe_allow_html=True)
-            st.markdown("### HABITS")
+            st.markdown('<div class="section-label">HABITS</div>', unsafe_allow_html=True)
             habits = ['run_done', 'workout_done', 'cold_shower', 'vacuum', 'diet_strict', 'no_junk']
             sums = df[habits].sum().sort_values()
             fig2 = go.Figure(go.Bar(x=sums.values, y=[h.replace('_done','').replace('_',' ').upper() for h in sums.index], 
@@ -329,6 +365,7 @@ with tab_history:
     if not df.empty:
         # HEATMAP
         st.markdown('<div class="hatom-card" style="padding:15px">', unsafe_allow_html=True)
+        st.markdown('<div class="section-label">CONSISTENCY MAP</div>', unsafe_allow_html=True)
         df['score'] = df[['run_done', 'workout_done', 'cold_shower', 'vacuum', 'diet_strict', 'no_junk']].sum(axis=1)
         fig_cal = go.Figure(data=go.Heatmap(z=[df['score']], x=df['date'], y=[' '], colorscale='Purples', showscale=False))
         fig_cal.update_layout(template="plotly_dark", height=100, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', margin=dict(t=0,b=20), xaxis=dict(showgrid=False))
@@ -339,7 +376,7 @@ with tab_history:
         c_sel, c_edit = st.columns([1, 2])
         with c_sel:
             st.markdown('<div class="hatom-card">', unsafe_allow_html=True)
-            st.markdown("### SEARCH")
+            st.markdown('<div class="section-label">SEARCH ARCHIVE</div>', unsafe_allow_html=True)
             edit_date = st.date_input("Select Date", datetime.today())
             record = df[df['date'] == pd.Timestamp(edit_date)]
             if not record.empty: st.markdown("<b style='color:#4ade80'>● RECORD FOUND</b>", unsafe_allow_html=True)
