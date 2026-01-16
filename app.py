@@ -14,147 +14,111 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- 2. THE "DEEP SPACE" AESTHETIC (Reference Image Style) ---
+# --- 2. DEEP SPACE UI (CSS) ---
 st.markdown("""
 <style>
-    /* IMPORT FONT (Inter/Roboto) */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
 
-    /* GLOBAL RESET */
+    /* BLACK VOID THEME */
     .stApp {
-        background-color: #000000; /* Pitch Black */
-        /* Subtle radial glow like the globe image */
-        background-image: radial-gradient(circle at 50% 10%, #1a1a2e 0%, #000000 50%);
+        background-color: #000000;
+        background-image: radial-gradient(circle at 50% 0%, #111 0%, #000 70%);
         font-family: 'Inter', sans-serif;
         color: #ffffff;
     }
 
-    /* HIDE STREAMLIT ELEMENTS */
+    /* HIDE BLOAT */
     header {visibility: hidden;}
     .block-container {
-        padding-top: 3rem;
+        padding-top: 2rem;
         padding-bottom: 5rem;
         max-width: 1200px;
     }
 
-    /* GLASS CONTAINERS (Like the search bar in image) */
+    /* GLASS CONTAINERS */
     .glass-container {
         background: rgba(255, 255, 255, 0.03);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 24px;
-        padding: 30px;
-        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 24px;
+        backdrop-filter: blur(12px);
         margin-bottom: 24px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
-    
+
     /* TYPOGRAPHY */
     h1 {
-        font-weight: 300;
-        font-size: 48px;
-        letter-spacing: -1px;
-        background: linear-gradient(180deg, #fff, #888);
+        font-weight: 200;
+        font-size: 42px;
+        letter-spacing: -2px;
+        text-align: center;
+        background: linear-gradient(180deg, #fff, #666);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-align: center;
-        margin-bottom: 10px;
     }
-    p.subtitle {
+    .subtitle {
         text-align: center;
-        color: #666;
-        font-size: 14px;
-        letter-spacing: 1px;
+        color: #444;
+        font-size: 12px;
+        letter-spacing: 2px;
         text-transform: uppercase;
+        margin-top: -10px;
         margin-bottom: 40px;
     }
-    h3, h4, h5 {
-        color: #e5e5e5;
-        font-weight: 500;
-        letter-spacing: -0.5px;
-    }
 
-    /* CUSTOM METRIC CARDS */
-    .metric-box {
-        text-align: center;
-        padding: 15px;
-        border-right: 1px solid rgba(255,255,255,0.1);
-    }
-    .metric-box:last-child { border-right: none; }
-    .metric-label {
-        color: #666;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        margin-bottom: 5px;
-    }
-    .metric-value {
-        font-size: 36px;
-        font-weight: 700;
-        color: #fff;
-    }
-    .metric-sub {
-        font-size: 12px;
-        color: #888;
-    }
-
-    /* INPUT FIELDS (Stealth Mode) */
-    .stTextInput input, .stNumberInput input, .stDateInput input, .stTextArea textarea {
-        background-color: rgba(255,255,255,0.05) !important;
-        border: 1px solid rgba(255,255,255,0.1) !important;
-        border-radius: 12px !important;
+    /* INPUTS */
+    .stTextInput input, .stNumberInput input, .stDateInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] {
+        background-color: #0a0a0a !important;
+        border: 1px solid #222 !important;
         color: #fff !important;
-        padding: 15px !important;
+        border-radius: 8px !important;
     }
-    .stTextInput input:focus, .stNumberInput input:focus {
-        border-color: #fff !important;
-        background-color: rgba(255,255,255,0.1) !important;
-    }
-
-    /* BUTTONS (The "pill" look) */
-    .stButton > button {
-        width: 100%;
-        background-color: #ffffff;
-        color: #000000;
-        border: none;
-        padding: 14px 28px;
-        border-radius: 30px; /* Pill shape */
-        font-weight: 600;
-        transition: transform 0.2s;
-    }
-    .stButton > button:hover {
-        transform: scale(1.02);
-        box-shadow: 0 0 15px rgba(255,255,255,0.4);
-    }
-
+    
     /* TABS */
     .stTabs [data-baseweb="tab-list"] {
+        border-bottom: 1px solid #222;
+        gap: 30px;
         justify-content: center;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        padding-bottom: 10px;
     }
     .stTabs [data-baseweb="tab"] {
-        color: #666;
         font-size: 14px;
+        color: #555;
     }
     .stTabs [aria-selected="true"] {
         color: #fff !important;
         border-bottom: 2px solid #fff;
     }
-    
-    /* SUCCESS MESSAGE */
+
+    /* SUCCESS BOX */
     .success-box {
-        background: rgba(74, 222, 128, 0.1);
-        border: 1px solid rgba(74, 222, 128, 0.3);
+        background: rgba(0, 255, 0, 0.05);
+        border: 1px solid rgba(0, 255, 0, 0.2);
         color: #4ade80;
-        padding: 15px;
-        border-radius: 12px;
+        padding: 12px;
+        border-radius: 8px;
         text-align: center;
         margin-bottom: 20px;
+        font-size: 14px;
+    }
+    
+    /* BUTTONS */
+    .stButton > button {
+        width: 100%;
+        border-radius: 8px;
+        height: 45px;
+        font-weight: 600;
+        background: #fff;
+        color: #000;
+        border: none;
+        transition: all 0.2s;
+    }
+    .stButton > button:hover {
+        transform: scale(1.01);
+        box-shadow: 0 0 20px rgba(255,255,255,0.2);
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- 3. BACKEND & LOGIC ---
+# --- 3. BACKEND ---
 def get_db_connection():
     scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
     try:
@@ -163,27 +127,23 @@ def get_db_connection():
         client = gspread.authorize(creds)
         return client.open("warrior_db").sheet1
     except Exception as e:
-        st.error(f"🔌 Database Disconnected: {e}")
+        st.error(f"🔌 Database Error: {e}")
         st.stop()
 
 def load_data():
     try:
         sheet = get_db_connection()
         data = sheet.get_all_values()
-        
         if len(data) < 2: return pd.DataFrame()
         
         headers = data.pop(0)
         df = pd.DataFrame(data, columns=headers)
-        
-        # FILTER: Remove empty rows based on Date
-        df = df[df['date'].astype(bool)]
+        df = df[df['date'].astype(bool)] # Remove empty dates
         
         if not df.empty:
             df['date'] = pd.to_datetime(df['date'])
             df['weight'] = pd.to_numeric(df['weight'], errors='coerce')
             
-            # Clean Habits (Convert "TRUE"/"FALSE" -> 1/0)
             habits = ['run_done', 'workout_done', 'cold_shower', 'vacuum', 'diet_strict', 'no_junk']
             for col in habits:
                 if col in df.columns:
@@ -192,199 +152,188 @@ def load_data():
             
             return df.sort_values('date', ascending=True)
         return df
-    except Exception as e:
+    except:
         return pd.DataFrame()
 
 df = load_data()
 
-# --- 4. UI: HEADER ---
+# --- 4. HEADER ---
 st.markdown("<h1>PROTOCOL OS</h1>", unsafe_allow_html=True)
-st.markdown("<p class='subtitle'>System Status: Optimized • User: Admin</p>", unsafe_allow_html=True)
+st.markdown("<p class='subtitle'>System Status: Online</p>", unsafe_allow_html=True)
 
-# --- 5. SUCCESS MESSAGE HANDLER (The Fix) ---
+# Success Message Handler
 if 'success_msg' in st.session_state:
     st.markdown(f"<div class='success-box'>{st.session_state['success_msg']}</div>", unsafe_allow_html=True)
-    # Clear it so it doesn't stay forever (optional, usually good to leave for one view)
     del st.session_state['success_msg']
 
-# --- 6. INTERFACE TABS ---
-tab_log, tab_dash = st.tabs(["ENTRY TERMINAL", "ANALYTICS HUB"])
+# --- 5. TABS ---
+tab_log, tab_dash, tab_history = st.tabs(["ENTRY LOG", "ANALYTICS", "HISTORY & EDIT"])
 
 # ==========================================
-# TAB 1: THE INPUT TERMINAL
+# TAB 1: NEW ENTRY
 # ==========================================
 with tab_log:
-    # Use a centered column layout for the form to look like the "Search Bar"
     c_pad_l, c_main, c_pad_r = st.columns([1, 2, 1])
-    
     with c_main:
         st.markdown('<div class="glass-container">', unsafe_allow_html=True)
-        
-        with st.form("entry_form", clear_on_submit=False):
-            # 1. SMART DEFAULT
-            last_weight = 94.0
-            if not df.empty:
-                last_weight = float(df['weight'].iloc[-1])
-            
+        with st.form("new_entry"):
             st.markdown("### NEW LOG")
             
-            # 2. INPUT GRID
-            c1, c2 = st.columns([1, 1])
-            with c1:
-                date_in = st.date_input("Date", datetime.today(), label_visibility="collapsed")
-            with c2:
-                weight_in = st.number_input("Weight", value=last_weight, step=0.1, format="%.1f", label_visibility="collapsed")
+            last_val = 94.0
+            if not df.empty: last_val = float(df['weight'].iloc[-1])
             
-            st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown("##### DAILY PROTOCOLS")
+            c1, c2 = st.columns(2)
+            d_in = c1.date_input("Date", datetime.today())
+            w_in = c2.number_input("Weight", value=last_val, step=0.1, format="%.1f")
             
-            # Habits Grid
+            st.markdown("<br><b>HABITS</b>", unsafe_allow_html=True)
             h1, h2, h3 = st.columns(3)
-            with h1:
-                run = st.checkbox("Running (20m)")
-                vac = st.checkbox("Stomach Vacuum")
-            with h2:
-                lift = st.checkbox("Heavy Lift / Calisthenics")
-                diet = st.checkbox("Diet Adherence")
-            with h3:
-                cold = st.checkbox("Cold Shower")
-                junk = st.checkbox("Zero Junk Food")
-                
-            st.markdown("<br>", unsafe_allow_html=True)
-            notes = st.text_area("Notes", placeholder="Add context: Energy levels, sleep quality...", height=80, label_visibility="collapsed")
+            run = h1.checkbox("Running")
+            vac = h1.checkbox("Vacuum")
+            lift = h2.checkbox("Workout")
+            diet = h2.checkbox("Diet")
+            cold = h3.checkbox("Cold Shower")
+            junk = h3.checkbox("No Junk")
             
-            st.markdown("<br>", unsafe_allow_html=True)
-            # 3. ACTION BUTTON
-            submitted = st.form_submit_button("COMMIT ENTRY")
-
-            if submitted:
+            notes = st.text_area("Notes", height=80)
+            
+            if st.form_submit_button("COMMIT ENTRY"):
                 try:
-                    sheet = get_db_connection()
-                    # Check duplicate
-                    if not df.empty and (df['date'] == pd.Timestamp(date_in)).any():
-                        st.warning("⚠️ Entry for this date already exists.")
+                    # DUPLICATE CHECK
+                    if not df.empty and (df['date'] == pd.Timestamp(d_in)).any():
+                        st.warning(f"⚠️ Data for {d_in} already exists. Go to 'HISTORY' to edit it.")
                     else:
-                        row_data = [
-                            date_in.strftime("%Y-%m-%d"), weight_in,
-                            int(run), int(lift), int(cold), int(vac), int(diet), int(junk), 
-                            7, str(notes)
-                        ]
-                        sheet.append_row(row_data)
-                        
-                        # --- THE FIX: USE SESSION STATE ---
-                        st.session_state['success_msg'] = f"✅ ENTRY LOGGED FOR {date_in.strftime('%Y-%m-%d')}"
+                        sheet = get_db_connection()
+                        row = [d_in.strftime("%Y-%m-%d"), w_in, int(run), int(lift), int(cold), int(vac), int(diet), int(junk), 7, str(notes)]
+                        sheet.append_row(row)
+                        st.session_state['success_msg'] = "✅ ENTRY SAVED"
                         st.cache_data.clear()
-                        st.rerun() 
-                        
+                        st.rerun()
                 except Exception as e:
                     st.error(f"Error: {e}")
-
         st.markdown('</div>', unsafe_allow_html=True)
 
 # ==========================================
-# TAB 2: THE DASHBOARD
+# TAB 2: ANALYTICS
 # ==========================================
 with tab_dash:
     if not df.empty:
-        # --- A. METRICS ENGINE ---
         curr = df['weight'].iloc[-1]
         start = df['weight'].iloc[0]
-        delta = curr - start
         
-        # Streak Calc
-        streak = 0
-        for i in range(len(df)-1, -1, -1):
-            if df.iloc[i]['cold_shower'] == 1 and df.iloc[i]['vacuum'] == 1:
-                streak += 1
-            else: break
-            
-        # Custom HTML Metrics
-        st.markdown('<div class="glass-container" style="padding: 0;">', unsafe_allow_html=True)
-        col1, col2, col3, col4 = st.columns(4)
-        
-        with col1:
-            st.markdown(f"""<div class="metric-box"><div class="metric-label">Current Weight</div><div class="metric-value">{curr}</div><div class="metric-sub">{round(delta, 1)} KG Total</div></div>""", unsafe_allow_html=True)
-        with col2:
-            st.markdown(f"""<div class="metric-box"><div class="metric-label">Protocol Streak</div><div class="metric-value">{streak}</div><div class="metric-sub">Days Active</div></div>""", unsafe_allow_html=True)
-        with col3:
-            st.markdown(f"""<div class="metric-box"><div class="metric-label">Target</div><div class="metric-value">{round(curr - 85.0, 1)}</div><div class="metric-sub">KG Remaining</div></div>""", unsafe_allow_html=True)
-        with col4:
-            score = int(df.iloc[-1][['run_done','cold_shower','diet_strict']].mean()*100)
-            st.markdown(f"""<div class="metric-box"><div class="metric-label">Discipline</div><div class="metric-value">{score}%</div><div class="metric-sub">Daily Score</div></div>""", unsafe_allow_html=True)
-        
+        # HTML Metrics
+        st.markdown('<div class="glass-container" style="padding:15px; display:flex; justify-content:space-around;">', unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align:center'><div style='color:#666; font-size:10px'>CURRENT</div><div style='font-size:24px; font-weight:bold'>{curr}</div></div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align:center'><div style='color:#666; font-size:10px'>TOTAL LOSS</div><div style='font-size:24px; font-weight:bold; color:#4ade80'>{round(curr-start,1)}</div></div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align:center'><div style='color:#666; font-size:10px'>TARGET</div><div style='font-size:24px; font-weight:bold; color:#666'>{round(curr-85,1)}</div></div>", unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # --- B. CHARTS ENGINE (Plotly Pro) ---
-        c_chart, c_cons = st.columns([2, 1])
-        
-        with c_chart:
+        c1, c2 = st.columns([2, 1])
+        with c1:
             st.markdown('<div class="glass-container">', unsafe_allow_html=True)
-            st.markdown("<h5>WEIGHT TRAJECTORY</h5>", unsafe_allow_html=True)
-            
             fig = go.Figure()
-            
-            # Area Chart with Gradient
-            fig.add_trace(go.Scatter(
-                x=df['date'], y=df['weight'],
-                mode='lines',
-                fill='tozeroy',
-                line=dict(color='#ffffff', width=2), # White Line
-                fillcolor='rgba(255, 255, 255, 0.1)', # Subtle white fill
-                name='Weight'
-            ))
-            
-            # Goal Line
-            fig.add_trace(go.Scatter(
-                x=[df['date'].min(), df['date'].max() + timedelta(days=7)],
-                y=[85, 85], mode='lines',
-                line=dict(color='rgba(255,255,255,0.3)', dash='dash'),
-                name='Goal'
-            ))
-
-            fig.update_layout(
-                template="plotly_dark",
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                margin=dict(t=20, l=0, r=0, b=0),
-                height=300,
-                xaxis=dict(showgrid=False),
-                yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.1)'),
-                showlegend=False
-            )
+            fig.add_trace(go.Scatter(x=df['date'], y=df['weight'], fill='tozeroy', line=dict(color='white', width=2), name='Weight'))
+            fig.add_trace(go.Scatter(x=[df['date'].min(), df['date'].max()], y=[85, 85], line=dict(dash='dash', color='#444'), name='Goal'))
+            fig.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', margin=dict(t=0,l=0,r=0,b=0), height=300, showlegend=False)
             st.plotly_chart(fig, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
-
-        with c_cons:
+        
+        with c2:
             st.markdown('<div class="glass-container">', unsafe_allow_html=True)
-            st.markdown("<h5>HABIT DNA</h5>", unsafe_allow_html=True)
-            
             habits = ['run_done', 'workout_done', 'cold_shower', 'vacuum', 'diet_strict', 'no_junk']
             sums = df[habits].sum().sort_values()
+            fig2 = go.Figure(go.Bar(x=sums.values, y=[h.replace('_done','').upper() for h in sums.index], orientation='h', marker_color='white'))
+            fig2.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', margin=dict(t=0,l=0,r=0,b=0), height=300, xaxis=dict(showgrid=False))
+            st.plotly_chart(fig2, use_container_width=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+
+# ==========================================
+# TAB 3: HISTORY & EDIT (NEW!)
+# ==========================================
+with tab_history:
+    if not df.empty:
+        # 1. VISUAL CALENDAR (HEATMAP)
+        st.markdown("##### 🗓️ LOG CALENDAR")
+        
+        # Prepare data for heatmap
+        df['score'] = df[['run_done', 'workout_done', 'cold_shower', 'vacuum', 'diet_strict', 'no_junk']].sum(axis=1)
+        
+        fig_cal = go.Figure(data=go.Heatmap(
+            z=[df['score']],
+            x=df['date'],
+            y=['Intensity'],
+            colorscale='Greys', # Deep space style
+            showscale=False
+        ))
+        fig_cal.update_layout(
+            template="plotly_dark", height=150, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+            xaxis=dict(showgrid=False), yaxis=dict(showgrid=False, showticklabels=False), margin=dict(t=0,b=20)
+        )
+        st.plotly_chart(fig_cal, use_container_width=True)
+        
+        st.markdown("---")
+        
+        # 2. SELECT & EDIT INTERFACE
+        c_sel, c_edit = st.columns([1, 2])
+        
+        with c_sel:
+            st.markdown("##### 🖊️ SELECT ENTRY")
+            # Select Date to Edit
+            edit_date = st.date_input("Pick a date to view/edit", datetime.today())
             
-            # Clean names
-            labels = [h.replace('_done','').replace('_',' ').upper() for h in sums.index]
+            # Check if exists
+            record = df[df['date'] == pd.Timestamp(edit_date)]
+            exists = not record.empty
             
-            fig_bar = go.Figure(go.Bar(
-                x=sums.values,
-                y=labels,
-                orientation='h',
-                marker=dict(
-                    color='#ffffff',
-                    opacity=0.8
-                )
-            ))
+            if exists:
+                st.markdown(f"<div style='color:#4ade80; margin-top:10px'>● LOG FOUND</div>", unsafe_allow_html=True)
+            else:
+                st.markdown(f"<div style='color:#666; margin-top:10px'>○ NO DATA</div>", unsafe_allow_html=True)
+
+        with c_edit:
+            st.markdown('<div class="glass-container">', unsafe_allow_html=True)
             
-            fig_bar.update_layout(
-                template="plotly_dark",
-                paper_bgcolor='rgba(0,0,0,0)',
-                plot_bgcolor='rgba(0,0,0,0)',
-                margin=dict(t=10, l=0, r=0, b=0),
-                height=310,
-                xaxis=dict(showgrid=False, showticklabels=False),
-                yaxis=dict(showgrid=False)
-            )
-            st.plotly_chart(fig_bar, use_container_width=True)
+            if exists:
+                # PRE-FILL FORM WITH EXISTING DATA
+                row = record.iloc[0]
+                with st.form("edit_form"):
+                    st.markdown(f"**EDITING: {edit_date.strftime('%b %d, %Y')}**")
+                    
+                    ew_in = st.number_input("Weight", value=float(row['weight']), step=0.1, format="%.1f")
+                    
+                    ec1, ec2, ec3 = st.columns(3)
+                    er = ec1.checkbox("Running", value=bool(row['run_done']))
+                    ev = ec1.checkbox("Vacuum", value=bool(row['vacuum']))
+                    el = ec2.checkbox("Workout", value=bool(row['workout_done']))
+                    ed = ec2.checkbox("Diet", value=bool(row['diet_strict']))
+                    ec = ec3.checkbox("Cold Shower", value=bool(row['cold_shower']))
+                    ej = ec3.checkbox("No Junk", value=bool(row['no_junk']))
+                    
+                    en = st.text_area("Notes", value=str(row['notes']), height=80)
+                    
+                    if st.form_submit_button("UPDATE ENTRY"):
+                        try:
+                            sheet = get_db_connection()
+                            # FIND ROW TO UPDATE (Crucial Step)
+                            # We search for the date string in the first column
+                            cell = sheet.find(edit_date.strftime("%Y-%m-%d"))
+                            if cell:
+                                r_idx = cell.row
+                                new_vals = [
+                                    edit_date.strftime("%Y-%m-%d"), ew_in, 
+                                    int(er), int(el), int(ec), int(ev), int(ed), int(ej), 7, str(en)
+                                ]
+                                # Update that specific range
+                                sheet.update(range_name=f"A{r_idx}:J{r_idx}", values=[new_vals])
+                                st.session_state['success_msg'] = f"✅ UPDATED {edit_date}"
+                                st.cache_data.clear()
+                                st.rerun()
+                        except Exception as e:
+                            st.error(f"Update failed: {e}")
+            else:
+                st.info(f"No entry exists for {edit_date}. Go to 'ENTRY LOG' to create one.")
+                
             st.markdown('</div>', unsafe_allow_html=True)
 
     else:
-        st.info("System Ready. Please log your first entry.")
+        st.info("No data available.")
