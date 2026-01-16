@@ -32,7 +32,7 @@ def get_db_connection():
         st.info("Check your Streamlit Secrets or ensure your Google Sheet is named 'warrior_db'.")
         st.stop()
 
-# --- LOAD DATA FUNCTION ---
+# --- LOAD DATA FUNCTION (FIXED) ---
 def load_data():
     try:
         sheet = get_db_connection()
@@ -40,12 +40,26 @@ def load_data():
         df = pd.DataFrame(data)
         
         if not df.empty:
-            # Convert date string to Date Object
+            # 1. Fix Date Format
             df['date'] = pd.to_datetime(df['date'])
-            # Force weight to be a number (handle empty cells)
+            
+            # 2. Fix Weight (Force to number)
             df['weight'] = pd.to_numeric(df['weight'], errors='coerce')
+            
+            # 3. FIX HABIT COLUMNS (The Crash Fix)
+            # Google Sheets sometimes sends "TRUE"/"FALSE" as text. We must force them to 1/0.
+            habits = ['run_done', 'workout_done', 'cold_shower', 'vacuum', 'diet_strict', 'no_junk']
+            for col in habits:
+                if col in df.columns:
+                    # Convert everything to string first, uppercase it, then map to 1/0
+                    df[col] = df[col].astype(str).str.upper()
+                    df[col] = df[col].replace({'TRUE': '1', 'FALSE': '0', '1': '1', '0': '0'})
+                    # Finally, force to numeric
+                    df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
+                    
         return df
     except Exception as e:
+        # If error, return empty dataframe so app doesn't crash
         return pd.DataFrame()
 
 # --- UI LAYOUT ---
@@ -166,3 +180,4 @@ with tab2:
             
     else:
         st.info("No data found yet. Go to 'Log Entry' tab to add your first day!")
+
