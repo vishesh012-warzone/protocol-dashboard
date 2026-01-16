@@ -7,200 +7,210 @@ from datetime import datetime, timedelta
 
 # --- 1. CONFIGURATION ---
 st.set_page_config(
-    page_title="PROTOCOL OS",
+    page_title="PROTOCOL OS | HATOM EDITION",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# --- 2. THE "HATOM" VISUAL ENGINE (CSS ANIMATION) ---
+# --- 2. THE "LIVING NEBULA" ENGINE (CSS) ---
 st.markdown("""
 <style>
     /* IMPORT FONTS */
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Inter:wght@300;400;600&display=swap');
 
-    /* --- ROOT CONTAINER SETUP --- */
+    /* --- 1. THE MOVING BACKGROUND (The Fix) --- */
     .stApp {
-        background-color: #000000; /* Fallback */
-        /* THE HATOM WALLPAPER */
-        background-image: url('https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?q=80&w=2672&auto=format&fit=crop');
-        background-size: 120% 120%; /* Zoomed in for movement */
+        background-color: #02040a;
+        /* High-Res Deep Space Texture */
+        background-image: url('https://images.unsplash.com/photo-1465101162946-4377e57745c3?q=80&w=2948&auto=format&fit=crop');
+        background-size: 130% 130%;
         background-position: center;
-        background-repeat: no-repeat;
-        /* THE MOVING EFFECT (CSS ANIMATION) */
-        animation: drift 60s ease-in-out infinite alternate;
+        /* The "Alive" Animation - Drifts slowly forever */
+        animation: nebuladrift 60s ease-in-out infinite alternate;
     }
 
-    /* KEYFRAMES FOR BACKGROUND MOVEMENT */
-    @keyframes drift {
-        0% { background-position: 0% 0%; }
-        100% { background-position: 100% 100%; }
+    @keyframes nebuladrift {
+        0% { background-position: 10% 10%; transform: scale(1); }
+        50% { background-position: 90% 50%; transform: scale(1.05); }
+        100% { background-position: 10% 90%; transform: scale(1); }
     }
 
-    /* OVERLAY FOR READABILITY (Vignette) */
+    /* --- 2. GLOBAL OVERLAYS (Texture & Glow) --- */
+    /* Vignette to focus eyes on center */
     .stApp::before {
         content: "";
         position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
-        background: radial-gradient(circle at center, rgba(0,0,0,0.2) 0%, #000000 90%);
+        background: radial-gradient(circle at 50% 50%, transparent 0%, #000000 90%);
+        pointer-events: none;
+        z-index: 0;
+    }
+    
+    /* Subtle Grid Overlay for Tech Feel */
+    .stApp::after {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
         pointer-events: none;
         z-index: 0;
     }
 
-    /* HIDE DEFAULT ELEMENTS */
+    /* Hide Streamlit Bloat */
     header, footer {visibility: hidden !important;}
     .block-container {
-        position: relative;
-        z-index: 1; /* Above background */
-        padding-top: 4rem;
+        padding-top: 2rem;
         padding-bottom: 5rem;
         max-width: 1400px;
+        z-index: 2; /* Sit above background */
+        position: relative;
     }
 
-    /* --- GLASS CARDS (High Transparency) --- */
-    .hatom-card {
-        background: rgba(13, 17, 28, 0.5); /* 50% Opacity for Glass Effect */
+    /* --- 3. GLASS CARDS (Hatom Style) --- */
+    .glass-panel {
+        background: rgba(13, 18, 30, 0.65); /* Darker, richer blue */
         border: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: 1px solid rgba(255, 255, 255, 0.15); /* Highlight top edge */
         border-radius: 24px;
         padding: 30px;
-        backdrop-filter: blur(20px); /* Heavy Blur */
-        -webkit-backdrop-filter: blur(20px);
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
         margin-bottom: 24px;
-        transition: transform 0.3s ease, border-color 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .hatom-card:hover {
-        border-color: rgba(139, 92, 246, 0.5); /* Purple Glow */
-        transform: translateY(-5px);
-        box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
+    
+    .glass-panel:hover {
+        transform: translateY(-5px) scale(1.01);
+        border-color: rgba(6, 182, 212, 0.4); /* Cyan Glow */
+        box-shadow: 0 30px 60px -12px rgba(6, 182, 212, 0.15); /* Ambient Glow */
     }
 
-    /* --- TYPOGRAPHY --- */
-    h1, h2, h3 { font-family: 'Outfit', sans-serif; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    /* --- 4. TYPOGRAPHY (Outfit Font) --- */
+    h1, h2, h3 { font-family: 'Outfit', sans-serif; color: #fff; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
     
-    .hero-title {
+    .hero-text {
         font-family: 'Outfit', sans-serif;
         font-weight: 800;
-        font-size: 80px;
-        background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
+        font-size: 72px;
+        background: linear-gradient(135deg, #FFFFFF 0%, #94A3B8 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        letter-spacing: -3px;
+        letter-spacing: -2px;
         line-height: 1;
-        filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+        margin-bottom: 10px;
+        filter: drop-shadow(0 0 30px rgba(255,255,255,0.2));
+    }
+    
+    .sub-hero {
+        font-family: 'Inter', sans-serif;
+        color: #94A3B8;
+        font-size: 16px;
+        letter-spacing: 1px;
     }
 
-    .section-label {
+    .label-tech {
         font-family: 'Outfit', sans-serif;
         font-size: 12px;
+        font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 2px;
-        color: #94a3b8;
+        color: #64748B;
         margin-bottom: 15px;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
     }
-    .section-label::before {
-        content: "";
-        width: 6px; height: 6px;
-        background: #8b5cf6;
-        border-radius: 50%;
-        box-shadow: 0 0 8px #8b5cf6;
+    .label-tech::before {
+        content: ""; width: 6px; height: 6px; background: #06B6D4; border-radius: 50%;
+        box-shadow: 0 0 10px #06B6D4;
     }
 
-    /* --- INPUT FIELDS (Glass) --- */
+    /* --- 5. INPUT FIELDS (Deep Glass) --- */
     .stTextInput input, .stNumberInput input, .stDateInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] {
-        background-color: rgba(0, 0, 0, 0.4) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        background-color: rgba(0, 0, 0, 0.3) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
         border-radius: 12px !important;
-        color: #fff !important;
+        color: #F8FAFC !important;
         padding: 15px !important;
-        backdrop-filter: blur(5px);
-        font-family: 'Inter', sans-serif;
+        font-family: 'Inter', sans-serif !important;
+        transition: all 0.3s;
     }
-    .stTextInput input:focus, .stNumberInput input:focus {
-        border-color: #8b5cf6 !important;
-        box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+    .stTextInput input:focus, .stNumberInput input:focus, .stTextArea textarea:focus {
+        background-color: rgba(6, 182, 212, 0.05) !important;
+        border-color: #06B6D4 !important;
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
     }
 
-    /* --- BUTTONS (Neon Gradient) --- */
+    /* --- 6. BUTTONS (Electric Gradient) --- */
     .stButton > button {
         width: 100%;
         height: 60px;
-        background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+        background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
         border: none;
         border-radius: 16px;
         color: white;
         font-family: 'Outfit', sans-serif;
         font-weight: 700;
-        text-transform: uppercase;
+        font-size: 16px;
         letter-spacing: 1px;
+        text-transform: uppercase;
         transition: all 0.3s;
-        box-shadow: 0 10px 30px rgba(147, 51, 234, 0.3);
     }
     .stButton > button:hover {
-        transform: scale(1.02);
-        box-shadow: 0 20px 50px rgba(147, 51, 234, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 40px rgba(6, 182, 212, 0.5); /* Massive Glow */
     }
 
-    /* --- TABS --- */
+    /* --- 7. TABS (Floating Pills) --- */
     .stTabs [data-baseweb="tab-list"] {
-        background: rgba(255, 255, 255, 0.05);
-        padding: 6px;
-        border-radius: 16px;
-        border: 1px solid rgba(255,255,255,0.05);
-        gap: 8px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 8px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        gap: 12px;
         backdrop-filter: blur(10px);
     }
     .stTabs [data-baseweb="tab"] {
-        color: #94a3b8;
+        color: #64748B;
         font-family: 'Outfit', sans-serif;
         font-weight: 600;
         border-radius: 12px;
-        padding: 10px 20px;
-        border: none;
+        padding: 10px 24px;
+        border: 1px solid transparent;
     }
     .stTabs [aria-selected="true"] {
-        background: rgba(255,255,255,0.1);
+        background: rgba(255, 255, 255, 0.1);
         color: #fff !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
 
-    /* --- METRICS --- */
-    .metric-val {
-        font-family: 'Outfit', sans-serif;
-        font-size: 56px;
-        font-weight: 700;
-        color: #fff;
-        line-height: 1;
-        text-shadow: 0 0 30px rgba(255,255,255,0.1);
-    }
-    .metric-lbl {
-        color: #94a3b8;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        margin-bottom: 5px;
-    }
-
-    /* --- SUCCESS BOX --- */
-    .hatom-success {
-        background: rgba(16, 185, 129, 0.2);
-        border: 1px solid rgba(16, 185, 129, 0.4);
-        color: #6ee7b7;
-        padding: 15px;
+    /* --- 8. SUCCESS TOAST --- */
+    .success-toast {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid #10B981;
+        color: #10B981;
+        padding: 16px;
         border-radius: 12px;
         text-align: center;
-        margin-bottom: 20px;
-        backdrop-filter: blur(10px);
-        font-weight: 600;
+        font-family: 'Outfit', sans-serif;
+        font-weight: 700;
         letter-spacing: 1px;
+        margin-bottom: 30px;
+        box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
     }
+
+    /* METRICS STYLING */
+    .metric-val { font-size: 48px; font-family: 'Outfit'; font-weight: 800; color: #fff; line-height:1; }
+    .metric-lbl { font-size: 11px; font-family: 'Inter'; text-transform:uppercase; letter-spacing:2px; color:#94A3B8; margin-bottom:5px; }
 </style>
 """, unsafe_allow_html=True)
 
-# --- 3. BACKEND ---
+# --- 3. BACKEND CONNECTION ---
 def get_db_connection():
     scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
     try:
@@ -238,37 +248,39 @@ df = load_data()
 # --- 4. HERO SECTION ---
 c1, c2 = st.columns([2, 1])
 with c1:
-    st.markdown('<div class="hero-title">PROTOCOL OS</div>', unsafe_allow_html=True)
+    st.markdown('<div class="hero-text">PROTOCOL OS</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-hero">ADVANCED BIOMETRIC TRACKING SYSTEM</div>', unsafe_allow_html=True)
 with c2:
-    st.markdown('<div style="text-align:right; padding-top:40px; color:#94a3b8; letter-spacing:1px; font-family:Outfit; font-size:14px;">SYSTEM STATUS: <b style="color:#4ade80; text-shadow:0 0 10px #4ade80;">● ONLINE</b></div>', unsafe_allow_html=True)
+    st.markdown('<div style="text-align:right; padding-top:40px; font-family:Outfit; color:#94a3b8; font-size:14px; letter-spacing:1px;">STATUS: <b style="color:#4ade80; text-shadow:0 0 15px #4ade80;">● ONLINE</b></div>', unsafe_allow_html=True)
 
-st.markdown("<div style='height:40px'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height:50px'></div>", unsafe_allow_html=True)
 
 if 'success_msg' in st.session_state:
-    st.markdown(f"<div class='hatom-success'>{st.session_state['success_msg']}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='success-toast'>{st.session_state['success_msg']}</div>", unsafe_allow_html=True)
     del st.session_state['success_msg']
 
-# --- 5. TABS ---
+# --- 5. UI TABS ---
 tab_log, tab_dash, tab_history = st.tabs(["ENTRY TERMINAL", "ANALYTICS HUB", "DATA ARCHIVE"])
 
 # ==========================================
-# TAB 1: ENTRY
+# TAB 1: ENTRY TERMINAL
 # ==========================================
 with tab_log:
     c_pad_l, c_main, c_pad_r = st.columns([1, 2, 1])
+    
     with c_main:
-        st.markdown('<div class="hatom-card">', unsafe_allow_html=True)
+        st.markdown('<div class="glass-panel">', unsafe_allow_html=True)
         with st.form("entry_form"):
             last_val = 94.0
             if not df.empty: last_val = float(df['weight'].iloc[-1])
             
-            st.markdown('<div class="section-label">NEW ENTRY LOG</div>', unsafe_allow_html=True)
+            st.markdown('<div class="label-tech">NEW DATA LOG</div>', unsafe_allow_html=True)
             c1, c2 = st.columns(2)
             d_in = c1.date_input("Date", datetime.today())
             w_in = c2.number_input("Weight (kg)", value=last_val, step=0.1, format="%.1f")
             
             st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown('<div class="section-label">PROTOCOL CHECKLIST</div>', unsafe_allow_html=True)
+            st.markdown('<div class="label-tech">PROTOCOL CHECKLIST</div>', unsafe_allow_html=True)
             
             h1, h2 = st.columns(2)
             with h1:
@@ -281,7 +293,7 @@ with tab_log:
                 junk = st.checkbox("No Junk Food")
             
             st.markdown("<br>", unsafe_allow_html=True)
-            notes = st.text_area("Session Notes", height=80, placeholder="Details on energy, mood, and performance...")
+            notes = st.text_area("Session Notes", height=100, placeholder="Energy levels, focus, sleep quality...")
             
             st.markdown("<br>", unsafe_allow_html=True)
             if st.form_submit_button("INITIATE UPLOAD"):
@@ -300,21 +312,22 @@ with tab_log:
         st.markdown('</div>', unsafe_allow_html=True)
 
 # ==========================================
-# TAB 2: ANALYTICS
+# TAB 2: ANALYTICS HUB
 # ==========================================
 with tab_dash:
     if not df.empty:
         curr = df['weight'].iloc[-1]
         start = df['weight'].iloc[0]
         
+        # METRICS GRID
         c1, c2, c3, c4 = st.columns(4)
         
         def card(lbl, val, sub):
             return f"""
-            <div class="hatom-card" style="text-align:center; padding:25px;">
+            <div class="glass-panel" style="text-align:center; padding:25px; margin-bottom:0;">
                 <div class="metric-lbl">{lbl}</div>
                 <div class="metric-val">{val}</div>
-                <div style="font-size:12px; color:#64748b; margin-top:5px;">{sub}</div>
+                <div style="font-size:13px; color:#64748B; margin-top:5px; font-weight:500;">{sub}</div>
             </div>
             """
             
@@ -329,62 +342,64 @@ with tab_dash:
         with c4: 
             score = int(df.iloc[-1][['run_done','cold_shower','diet_strict']].mean()*100)
             st.markdown(card("SCORE", f"{score}%", "DAILY RATING"), unsafe_allow_html=True)
-            
+        
+        st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
+
         # CHARTS
         g1, g2 = st.columns([2, 1])
         
         with g1:
-            st.markdown('<div class="hatom-card">', unsafe_allow_html=True)
-            st.markdown('<div class="section-label">TRAJECTORY</div>', unsafe_allow_html=True)
+            st.markdown('<div class="glass-panel">', unsafe_allow_html=True)
+            st.markdown('<div class="label-tech">TRAJECTORY ANALYSIS</div>', unsafe_allow_html=True)
             fig = go.Figure()
-            fig.add_trace(go.Scatter(x=df['date'], y=df['weight'], mode='lines', fill='tozeroy', 
-                                   line=dict(color='#8b5cf6', width=3), 
-                                   fillcolor='rgba(139, 92, 246, 0.1)', name='Weight'))
-            fig.add_trace(go.Scatter(x=[df['date'].min(), df['date'].max()], y=[85, 85], mode='lines', line=dict(dash='dash', color='#64748b')))
+            # Gradient Area Chart
+            fig.add_trace(go.Scatter(x=df['date'], y=df['weight'], mode='lines', 
+                                   fill='tozeroy', 
+                                   line=dict(color='#06B6D4', width=3), # Cyan Line
+                                   fillcolor='rgba(6, 182, 212, 0.1)')) # Cyan Fill
+            fig.add_trace(go.Scatter(x=[df['date'].min(), df['date'].max()], y=[85, 85], mode='lines', line=dict(dash='dash', color='#64748B')))
             fig.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', 
                             margin=dict(t=20,l=0,r=0,b=0), height=350, xaxis=dict(showgrid=False), yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.05)'), showlegend=False)
             st.plotly_chart(fig, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
             
         with g2:
-            st.markdown('<div class="hatom-card">', unsafe_allow_html=True)
-            st.markdown('<div class="section-label">HABITS</div>', unsafe_allow_html=True)
+            st.markdown('<div class="glass-panel">', unsafe_allow_html=True)
+            st.markdown('<div class="label-tech">HABIT DENSITY</div>', unsafe_allow_html=True)
             habits = ['run_done', 'workout_done', 'cold_shower', 'vacuum', 'diet_strict', 'no_junk']
             sums = df[habits].sum().sort_values()
             fig2 = go.Figure(go.Bar(x=sums.values, y=[h.replace('_done','').replace('_',' ').upper() for h in sums.index], 
-                                  orientation='h', marker=dict(color=sums.values, colorscale='Purples')))
+                                  orientation='h', marker=dict(color=sums.values, colorscale='Cyan')))
             fig2.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', 
                             margin=dict(t=20,l=0,r=0,b=0), height=350, xaxis=dict(showgrid=False))
             st.plotly_chart(fig2, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
 
 # ==========================================
-# TAB 3: ARCHIVE
+# TAB 3: DATA ARCHIVE
 # ==========================================
 with tab_history:
     if not df.empty:
-        # HEATMAP
-        st.markdown('<div class="hatom-card" style="padding:15px">', unsafe_allow_html=True)
-        st.markdown('<div class="section-label">CONSISTENCY MAP</div>', unsafe_allow_html=True)
+        st.markdown('<div class="glass-panel" style="padding:20px">', unsafe_allow_html=True)
+        st.markdown('<div class="label-tech">CONSISTENCY MAP</div>', unsafe_allow_html=True)
         df['score'] = df[['run_done', 'workout_done', 'cold_shower', 'vacuum', 'diet_strict', 'no_junk']].sum(axis=1)
-        fig_cal = go.Figure(data=go.Heatmap(z=[df['score']], x=df['date'], y=[' '], colorscale='Purples', showscale=False))
-        fig_cal.update_layout(template="plotly_dark", height=100, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', margin=dict(t=0,b=20), xaxis=dict(showgrid=False))
+        fig_cal = go.Figure(data=go.Heatmap(z=[df['score']], x=df['date'], y=[' '], colorscale='Cyan', showscale=False))
+        fig_cal.update_layout(template="plotly_dark", height=120, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', margin=dict(t=0,b=20), xaxis=dict(showgrid=False))
         st.plotly_chart(fig_cal, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # EDITOR
         c_sel, c_edit = st.columns([1, 2])
         with c_sel:
-            st.markdown('<div class="hatom-card">', unsafe_allow_html=True)
-            st.markdown('<div class="section-label">SEARCH ARCHIVE</div>', unsafe_allow_html=True)
+            st.markdown('<div class="glass-panel">', unsafe_allow_html=True)
+            st.markdown('<div class="label-tech">SEARCH ARCHIVE</div>', unsafe_allow_html=True)
             edit_date = st.date_input("Select Date", datetime.today())
             record = df[df['date'] == pd.Timestamp(edit_date)]
             if not record.empty: st.markdown("<b style='color:#4ade80'>● RECORD FOUND</b>", unsafe_allow_html=True)
-            else: st.markdown("<b style='color:#64748b'>○ NO DATA</b>", unsafe_allow_html=True)
+            else: st.markdown("<b style='color:#64748B'>○ NO DATA</b>", unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
         
         with c_edit:
-            st.markdown('<div class="hatom-card">', unsafe_allow_html=True)
+            st.markdown('<div class="glass-panel">', unsafe_allow_html=True)
             if not record.empty:
                 row = record.iloc[0]
                 with st.form("edit_form"):
